@@ -11,6 +11,10 @@ public class ThirdPersonCameraModel : MonoBehaviour
     [Header("References")]
     public Transform player;
 
+    [Header("Inputs")]
+    public float mouseSensitivity = 1f;
+    public float zoomSensitivity = 1f;
+
     [Header("Parameters")]
     public float distance = 5f;
     public float yaw = 0f;
@@ -48,19 +52,24 @@ public class ThirdPersonCameraModel : MonoBehaviour
 
         Vector3 forward = (player.position - cameraPosition).normalized;
 
-        Vector3 helper = Mathf.Abs(forward.y) > 0.999f ? Vector3.forward : Vector3.up;
+        Vector3 right = Vector3.Cross(Vector3.up, forward).normalized;
+        // Cross(Vector3.up, forward) = (Vector3.upy * forwardz - Vector3.upz * forwardy,
+        //                               Vector3.upz * forwardx - Vector3.upx * forwardz,
+        //                               Vector3.upx * forwardy - Vector3.upy * forwardx)
 
-        Vector3 right = Vector3.Cross(helper, forward).normalized;
         Vector3 up = Vector3.Cross(forward, right).normalized;
+        // Cross(forward, right) = (forwardy * rightz - forwardz * righty,
+        //                          forwardz * rightx - forwardx * rightz,
+        //                          forwardx * righty - forwardy * rightx)
+        
+        Vector3[] basis = new Vector3[3];
+        basis[0] = right;
+        basis[1] = up;
+        basis[2] = forward;
 
-        Matrix4x4 rotMatrix = new Matrix4x4();
-
-        rotMatrix.SetColumn(0, new Vector4(right.x, right.y, right.z, 0));
-        rotMatrix.SetColumn(1, new Vector4(up.x, up.y, up.z, 0));
-        rotMatrix.SetColumn(2, new Vector4(forward.x, forward.y, forward.z, 0));
-        rotMatrix.SetColumn(3, new Vector4(0, 0, 0, 1));
-
-        transform.rotation = rotMatrix.rotation;
+        // Convert basis to rotation
+        Quaternion rotation = Quaternion.LookRotation(basis[2], basis[1]);
+        transform.rotation = rotation;
 
         using (vectors.Begin())
         {
@@ -75,5 +84,18 @@ public class ThirdPersonCameraModel : MonoBehaviour
                 vectors.Draw(cameraPosition, cameraPosition + up * scale, Color.green);
             }
         }
+
+        MouseInput();
+    }
+
+    private void MouseInput()
+    {
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+
+        yaw -= mouseX * mouseSensitivity * 100f * Time.deltaTime;
+        pitch -= mouseY * mouseSensitivity * 100f * Time.deltaTime;
+        distance -= scroll * zoomSensitivity;
     }
 }

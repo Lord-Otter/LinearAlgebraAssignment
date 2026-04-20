@@ -626,8 +626,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1101497368}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.19541301, y: 0.76038, z: -0.2655366, w: 0.55957687}
-  m_LocalPosition: {x: -3.7883222, y: 4.1561494, z: 1.1799313}
+  m_LocalRotation: {x: 0.17037684, y: -0.65419394, z: 0.15470518, w: 0.720464}
+  m_LocalPosition: {x: 4.44965, y: 3.2395756, z: -0.4300202}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -647,14 +647,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1056242832}
-  distance: 5.07
-  yaw: 162.7
-  pitch: 38.5
+  mouseSensitivity: 3
+  zoomSensitivity: 3
+  distance: 5
+  yaw: -5.52
+  pitch: 26.61
   minPitch: -80
   maxPitch: 80
-  minDistance: 1
+  minDistance: 1.5
   maxDistance: 10
-  showBasis: 1
+  showBasis: 0
 --- !u!114 &1101497372
 MonoBehaviour:
   m_ObjectHideFlags: 0
